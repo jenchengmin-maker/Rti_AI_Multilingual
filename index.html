@@ -56,6 +56,7 @@
         <header class="text-center">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400">中央廣播電臺即時多語新聞翻譯與語音播放系統</h1>
             <p class="mt-2 text-gray-500 dark:text-gray-400 text-lg">請輸入繁體中文內容，即可翻譯並播放語音。</p>
+            <p class="mt-2 text-gray-500 dark:text-gray-400 text-lg">By James Jen</p> 
         </header>
 
         <!-- 輸入區塊 -->
@@ -349,7 +350,7 @@
             const prompt = `Translate the following Traditional Chinese news report into ${targetLangName}. The style and vocabulary should be formal and suitable for a news report in that language. Preserve all line breaks in the body text. Structure the output with the following labels: title:, date:, source:, editor:, and body:.\n\n${text}`;
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "AIzaSyC1Fcc6qXOHY7tEh11fq7AD0ddwjtyeaNI";
+            const apiKey = "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
             
             try {
@@ -724,6 +725,11 @@
                     showErrorMessage('音訊檔案尚未生成，請先點擊播放按鈕。');
                 }
             });
+
+            // 新增：播放完成事件監聽器
+            cardAudioPlayer.onended = () => {
+                playButton.innerHTML = playSvg;
+            };
         }
         
         /**
@@ -754,7 +760,7 @@
                 model: "gemini-2.5-flash-preview-tts"
             };
 
-            const apiKey = "AIzaSyC1Fcc6qXOHY7tEh11fq7AD0ddwjtyeaNI";
+            const apiKey = "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
 
             try {
