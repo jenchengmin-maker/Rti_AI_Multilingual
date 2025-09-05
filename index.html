@@ -39,6 +39,14 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        /* 編輯模式下的樣式 */
+        .editable {
+            outline: none;
+        }
+        .editable:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px #3b82f6;
+        }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 sm:p-10 transition-colors duration-300">
@@ -47,7 +55,7 @@
     <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 sm:p-8 space-y-8">
         <header class="text-center">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400">中央廣播電臺即時多語新聞翻譯與語音播放系統</h1>
-            <p class="mt-2 text-gray-500 dark:text-gray-400 text-lg">請輸入繁體中文內容，即可翻譯並播放語音 By James Jen。</p>
+            <p class="mt-2 text-gray-500 dark:text-gray-400 text-lg">請輸入繁體中文內容，即可翻譯並播放語音。</p>
         </header>
 
         <!-- 輸入區塊 -->
@@ -122,7 +130,7 @@
                     </div>
                     <div class="flex items-center space-x-2">
                         <input type="checkbox" id="lang-ko" value="韓語" class="custom-checkbox">
-                        <label for="lang-ko" class="text-sm cursor-pointer">韓語</p>
+                        <label for="lang-ko" class="text-sm cursor-pointer">韓語</label>
                     </div>
                     <div class="flex items-center space-x-2">
                         <input type="checkbox" id="lang-es" value="西班牙語" class="custom-checkbox">
@@ -143,6 +151,31 @@
                     <div class="flex items-center space-x-2">
                         <input type="checkbox" id="lang-ru" value="俄語" class="custom-checkbox">
                         <label for="lang-ru" class="text-sm cursor-pointer">俄語</label>
+                    </div>
+                    <!-- 新增的語言選項 -->
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="lang-my" value="緬甸語" class="custom-checkbox">
+                        <label for="lang-my" class="text-sm cursor-pointer">緬甸語</label>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="lang-km" value="柬埔寨語" class="custom-checkbox">
+                        <label for="lang-km" class="text-sm cursor-pointer">柬埔寨語</label>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="lang-fil" value="菲律賓語(Tagalog)" class="custom-checkbox">
+                        <label for="lang-fil" class="text-sm cursor-pointer">菲律賓語(Tagalog)</label>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="lang-mn" value="蒙古語" class="custom-checkbox">
+                        <label for="lang-mn" class="text-sm cursor-pointer">蒙古語</label>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="lang-uk" value="烏克蘭語" class="custom-checkbox">
+                        <label for="lang-uk" class="text-sm cursor-pointer">烏克蘭語</label>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="lang-ar" value="阿拉伯語" class="custom-checkbox">
+                        <label for="lang-ar" class="text-sm cursor-pointer">阿拉伯語</label>
                     </div>
                 </div>
                 <div class="mt-4 flex space-x-2">
@@ -198,39 +231,105 @@
 
         // 定義目標語言及其代碼和對應的 Gemini 語音名稱
         const targetLanguages = {
-            '中文': { code: 'zh-Hant', voice: 'Kore' },
-            '英語': { code: 'en', voice: 'Orus' },
-            '印尼語': { code: 'id', voice: 'Achernar' },
-            '泰語': { code: 'th', voice: 'Algenib' },
-            '越南語': { code: 'vi', voice: 'Sadaltager' },
-            '日語': { code: 'ja', voice: 'Kore' },
-            '韓語': { code: 'ko', voice: 'Laomedeia' },
-            '西班牙語': { code: 'es', voice: 'Vindemiatrix' },
-            '法語': { code: 'fr', voice: 'Algieba' },
-            '德語': { code: 'de', voice: 'Rasalgethi' },
-            '馬來語': { code: 'ms', voice: 'Callirrhoe' },
-            '俄語': { code: 'ru', voice: 'Umbriel' }
+            '中文': { code: 'zh-TW', voice: 'Kore' },
+            '英語': { code: 'en-US', voice: 'Orus' },
+            '印尼語': { code: 'id-ID', voice: 'Achernar' },
+            '泰語': { code: 'th-TH', voice: 'Algenib' },
+            '越南語': { code: 'vi-VN', voice: 'Sadaltager' },
+            '日語': { code: 'ja-JP', voice: 'Kore' },
+            '韓語': { code: 'ko-KR', voice: 'Laomedeia' },
+            '西班牙語': { code: 'es-US', voice: 'Vindemiatrix' },
+            '法語': { code: 'fr-FR', voice: 'Algieba' },
+            '德語': { code: 'de-DE', voice: 'Rasalgethi' },
+            '馬來語': { code: 'ms-MY', voice: 'Callirrhoe' },
+            '俄語': { code: 'ru-RU', voice: 'Umbriel' },
+            '緬甸語': { code: 'my-MM', voice: 'Laomedeia' },
+            '柬埔寨語': { code: 'km-KH', voice: 'Zubenelgenubi' },
+            '菲律賓語(Tagalog)': { code: 'fil-PH', voice: 'Umbriel' },
+            '蒙古語': { code: 'mn-MN', voice: 'Achird' },
+            '烏克蘭語': { code: 'uk-UA', voice: 'Sadachbia' },
+            '阿拉伯語': { code: 'ar-EG', voice: 'Zubenelgenubi' }
         };
-
+        
         // 新增翻譯標籤的對照表，並加入新聞引據的翻譯
         const translatedLabels = {
-            'zh-Hant': { dateLabel: '編輯日期與時間', editorLabel: '撰稿編輯', sourceLabel: '新聞引據' },
-            'en': { dateLabel: 'Edit Date and Time', editorLabel: 'Editor', sourceLabel: 'News Source' },
-            'id': { dateLabel: 'Tanggal dan Waktu Edit', editorLabel: 'Editor', sourceLabel: 'Sumber Berita' },
-            'th': { dateLabel: 'วันที่และเวลาแก้ไข', editorLabel: 'ผู้แก้ไข', sourceLabel: 'แหล่งข่าว' },
-            'vi': { dateLabel: 'Ngày và giờ chỉnh sửa', editorLabel: 'Biên tập viên', sourceLabel: 'Nguồn tin' },
-            'ja': { dateLabel: '編集日付と時間', editorLabel: '編集者', sourceLabel: 'ニュースソース' },
-            'ko': { dateLabel: '편집 날짜 및 시간', editorLabel: '편집자', sourceLabel: '뉴스 출처' },
-            'es': { dateLabel: 'Fecha y hora de edición', editorLabel: 'Editor', sourceLabel: 'Fuente de noticias' },
-            'fr': { dateLabel: 'Date et heure de modification', editorLabel: 'Éditeur', sourceLabel: 'Source de nouvelles' },
-            'de': { dateLabel: 'Bearbeitungsdatum und -zeit', editorLabel: 'Redakteur', sourceLabel: 'Nachrichtenquelle' },
-            'ms': { dateLabel: 'Tarikh dan Masa Suntingan', editorLabel: 'Penyunting', sourceLabel: 'Sumber Berita' },
-            'ru': { dateLabel: 'Дата и время редактирования', editorLabel: 'Редактор', sourceLabel: 'Источник новостей' }
+            'zh-TW': { dateLabel: '編輯日期與時間', editorLabel: '撰稿編輯', sourceLabel: '新聞引據' },
+            'en-US': { dateLabel: 'Edit Date and Time', editorLabel: 'Editor', sourceLabel: 'News Source' },
+            'id-ID': { dateLabel: 'Tanggal dan Waktu Edit', editorLabel: 'Editor', sourceLabel: 'Sumber Berita' },
+            'th-TH': { dateLabel: 'วันที่และเวลาแก้ไข', editorLabel: 'ผู้แก้ไข', sourceLabel: 'แหล่งข่าว' },
+            'vi-VN': { dateLabel: 'Ngày và giờ chỉnh sửa', editorLabel: 'Biên tập viên', sourceLabel: 'Nguồn tin' },
+            'ja-JP': { dateLabel: '編集日付と時間', editorLabel: '編集者', sourceLabel: 'ニュースソース' },
+            'ko-KR': { dateLabel: '편집 날짜 및 시간', editorLabel: '편집자', sourceLabel: '뉴스 출처' },
+            'es-US': { dateLabel: 'Fecha y hora de edición', editorLabel: 'Editor', sourceLabel: 'Fuente de noticias' },
+            'fr-FR': { dateLabel: 'Date et heure de modification', editorLabel: 'Éditeur', sourceLabel: 'Source de nouvelles' },
+            'de-DE': { dateLabel: 'Bearbeitungsdatum und -zeit', editorLabel: 'Redakteur', sourceLabel: 'Nachrichtenquelle' },
+            'ms-MY': { dateLabel: 'Tarikh dan Masa Suntingan', editorLabel: 'Penyunting', sourceLabel: 'Sumber Berita' },
+            'ru-RU': { dateLabel: 'Дата и время редактирования', editorLabel: 'Редактор', sourceLabel: 'Источник новостей' },
+            'my-MM': { dateLabel: 'တည်းဖြတ်သည့်ရက်စွဲနှင့်အချိန်', editorLabel: 'အယ်ဒီတာ', sourceLabel: 'သတင်းရင်းမြစ်' },
+            'km-KH': { dateLabel: 'កាលបរិច្ឆេទ និង ពេលវេលាកែសម្រួល', editorLabel: 'អ្នកកែសម្រួល', sourceLabel: 'ប្រភពព័ត៌មាន' },
+            'fil-PH': { dateLabel: 'Petsa at Oras ng Pag-edit', editorLabel: 'Editor', sourceLabel: 'Pinagmulan ng Balita' },
+            'mn-MN': { dateLabel: 'Зассан огноо, цаг', editorLabel: 'Редактор', sourceLabel: 'Мэдээний эх сурвал' },
+            'uk-UA': { dateLabel: 'Дата та час редагування', editorLabel: 'Редактор', sourceLabel: 'Джерело новин' },
+            'ar-EG': { dateLabel: 'تاريخ ووقت التعديل', editorLabel: 'المحرر', sourceLabel: 'مصدر الأخبار' }
         };
 
-        // 語音播放的狀態
-        let audioPlayer = null;
         let wavBlobs = {}; // 用於暫存生成的 WAV Blob
+
+        // 將 Base64 編碼的字串轉換為 ArrayBuffer
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // 將 PCM 音訊資料轉換為 WAV 格式的 Blob
+        function pcmToWav(pcmData, sampleRate) {
+            const numSamples = pcmData.length;
+            const headerSize = 44;
+            const buffer = new ArrayBuffer(headerSize + numSamples * 2);
+            const view = new DataView(buffer);
+
+            // WAV 檔案標頭
+            let offset = 0;
+            // 'RIFF'
+            view.setUint32(offset, 0x52494646, false); offset += 4;
+            // file size
+            view.setUint32(offset, 36 + numSamples * 2, true); offset += 4;
+            // 'WAVE'
+            view.setUint32(offset, 0x57415645, false); offset += 4;
+            // 'fmt '
+            view.setUint32(offset, 0x666d7420, false); offset += 4;
+            // chunk size (16 for PCM)
+            view.setUint32(offset, 16, true); offset += 4;
+            // audio format (1 for PCM)
+            view.setUint16(offset, 1, true); offset += 2;
+            // num channels (1)
+            view.setUint16(offset, 1, true); offset += 2;
+            // sample rate
+            view.setUint32(offset, sampleRate, true); offset += 4;
+            // byte rate
+            view.setUint32(offset, sampleRate * 2, true); offset += 4;
+            // block align
+            view.setUint16(offset, 2, true); offset += 2;
+            // bits per sample
+            view.setUint16(offset, 16, true); offset += 2;
+            // 'data'
+            view.setUint32(offset, 0x64617461, false); offset += 4;
+            // data size
+            view.setUint32(offset, numSamples * 2, true); offset += 4;
+
+            // 寫入 PCM 資料
+            for (let i = 0; i < numSamples; i++) {
+                view.setInt16(offset, pcmData[i], true);
+                offset += 2;
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
 
         // 顯示錯誤訊息的函式
         function showErrorMessage(message) {
@@ -250,7 +349,7 @@
             const prompt = `Translate the following Traditional Chinese news report into ${targetLangName}. The style and vocabulary should be formal and suitable for a news report in that language. Preserve all line breaks in the body text. Structure the output with the following labels: title:, date:, source:, editor:, and body:.\n\n${text}`;
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "AIzaSyC1Fcc6qXOHY7tEh11fq7AD0ddwjtyeaNI";
+            const apiKey = "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
             
             try {
@@ -261,6 +360,8 @@
                 });
                 
                 if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`API Error: ${response.status} ${response.statusText} - ${errorText}`);
                     throw new Error(`API response error: ${response.statusText}`);
                 }
                 
@@ -285,42 +386,39 @@
          * @returns {string[]} 包含標題、日期、引據、編輯和內文的陣列。
          */
         function parseTranslatedText(text) {
-            const lines = text.split('\n');
             let translatedTitle = '';
             let translatedDate = '';
             let translatedSource = '';
             let translatedEditor = '';
             let translatedBody = '';
 
-            // 使用 find 尋找每個標籤的行，確保解析準確
-            const titleLine = lines.find(line => line.toLowerCase().startsWith('title:'));
-            if (titleLine) translatedTitle = titleLine.substring('title:'.length).trim();
+            const getSectionContent = (label, fullText) => {
+                // 使用非貪婪匹配來確保只匹配到下一個標籤之前
+                const pattern = new RegExp(`^${label}:\\s*(.*?)(?=\\n\\w+:\\s*|$)`, 's');
+                const match = fullText.match(pattern);
+                return match ? match[1].trim() : '';
+            };
 
-            const dateLine = lines.find(line => line.toLowerCase().startsWith('date:'));
-            if (dateLine) translatedDate = dateLine.substring('date:'.length).trim();
+            // 使用一個大的正規表達式來解析所有欄位
+            const fullPattern = /title:\s*([\s\S]*?)\s*date:\s*([\s\S]*?)\s*source:\s*([\s\S]*?)\s*editor:\s*([\s\S]*?)\s*body:\s*([\s\S]*)/;
+            const match = text.match(fullPattern);
 
-            const sourceLine = lines.find(line => line.toLowerCase().startsWith('source:'));
-            if (sourceLine) translatedSource = sourceLine.substring('source:'.length).trim();
-
-            const editorLine = lines.find(line => line.toLowerCase().startsWith('editor:'));
-            if (editorLine) translatedEditor = editorLine.substring('editor:'.length).trim();
-            
-            // 找出 body: 標籤所在行的索引
-            const bodyStartIndex = lines.findIndex(line => line.toLowerCase().startsWith('body:'));
-            
-            if (bodyStartIndex !== -1) {
-                // 將 body: 標籤後的內容作為 body 的第一行
-                translatedBody = lines[bodyStartIndex].substring('body:'.length).trim();
-                
-                // 將後續的所有行都當作 body 的一部分
-                for (let i = bodyStartIndex + 1; i < lines.length; i++) {
-                    // 如果後續的行不是空行，就加入 body
-                    if (lines[i].trim() !== '') {
-                        translatedBody += '\n' + lines[i];
-                    }
-                }
+            if (match) {
+                // 如果匹配成功，則按順序賦值
+                translatedTitle = match[1].trim();
+                translatedDate = match[2].trim();
+                translatedSource = match[3].trim();
+                translatedEditor = match[4].trim();
+                translatedBody = match[5].trim();
+            } else {
+                // 如果完整的正規表達式不匹配，則嘗試逐個匹配
+                translatedTitle = getSectionContent('title', text);
+                translatedDate = getSectionContent('date', text);
+                translatedSource = getSectionContent('source', text);
+                translatedEditor = getSectionContent('editor', text);
+                translatedBody = getSectionContent('body', text);
             }
-            
+
             return [translatedTitle, translatedDate, translatedSource, translatedEditor, translatedBody];
         }
 
@@ -348,7 +446,10 @@
             const dateAndTime = date && time ? `${date} ${time}` : date || time;
 
             // 將所有欄位內容組合成一個文本，並使用英文標籤來引導翻譯
+            // **修正**：將所有輸入欄位的內容合併成一個單一的字符串，以確保它們能夠被模型正確處理
+            // 並在每個欄位後添加標籤，以便模型能夠識別並翻譯相應的內容。
             const allText = `title: ${title}\ndate: ${dateAndTime}\nsource: ${source}\neditor: ${editor}\nbody: ${body}`;
+
 
             if (!title && !date && !time && !editor && !source && !body) {
                 showErrorMessage('請輸入您想翻譯的內容。');
@@ -358,7 +459,7 @@
             // 禁用按鈕並顯示載入狀態
             translateButton.disabled = true;
             translateButton.textContent = '翻譯中...';
-            resultsContainer.innerHTML = ''; // 清空先前的結果
+            resultsContainer.innerHTML = '';
             wavBlobs = {}; // 清空之前的語音檔案暫存
 
             try {
@@ -407,66 +508,45 @@
          * @param {string} body 翻譯後的內文。
          */
         function createResultCard(langName, langCode, voiceName, title, date, source, editor, body) {
-            // 合併所有文本用於語音播放
-            const combinedText = `${title}\n${date}\n${source}\n${editor}\n${body}`;
-
             // 根據語言代碼設定免責聲明
             let disclaimer;
             switch(langCode) {
-                case 'zh-Hant':
+                case 'zh-TW':
                     disclaimer = '此語音由AI生成，其內容為輸入之中文原文。';
-                    break;
-                case 'en':
-                    disclaimer = 'This translation is generated by AI.';
-                    break;
-                case 'id':
-                    disclaimer = 'Terjemahan ini dibuat oleh AI.';
-                    break;
-                case 'th':
-                    disclaimer = 'การแปลนี้สร้างโดย AI.';
-                    break;
-                case 'vi':
-                    disclaimer = 'Bản dịch này được tạo bởi AI.';
-                    break;
-                case 'ja':
-                    disclaimer = 'この翻訳はAIによって生成されました。';
-                    break;
-                case 'ko':
-                    disclaimer = '이 번역은 AI에 의해 생성되었습니다.';
-                    break;
-                case 'es':
-                    disclaimer = 'Esta traducción es generada por IA.';
-                    break;
-                case 'fr':
-                    disclaimer = 'Cette traduction est générée par l\'IA.';
-                    break;
-                case 'de':
-                    disclaimer = 'Diese Übersetzung wird von AI generiert.';
-                    break;
-                case 'ms':
-                    disclaimer = 'Terjemahan ini dijana oleh AI.';
-                    break;
-                case 'ru':
-                    disclaimer = 'Этот перевод сгенерирован ИИ.';
                     break;
                 default:
                     disclaimer = '本翻譯由AI生成。';
             }
 
             // 根據語言代碼取得翻譯後的標籤
-            const labels = translatedLabels[langCode] || translatedLabels['zh-Hant'];
-
+            const labels = translatedLabels[langCode] || translatedLabels['zh-TW'];
+            
             const card = document.createElement('div');
             card.className = 'bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-xl space-y-4';
             
             // 修正：將換行符號 (\n) 轉換為 HTML 的 <br> 標籤
             const formattedBody = body.replace(/\n/g, '<br>');
-
+            
             card.innerHTML = `
                 <div class="flex items-center justify-between">
                     <h3 class="text-xl font-semibold">${langName}</h3>
                     <div class="flex space-x-2">
-                        <button class="play-button px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-200 flex items-center space-x-2" data-lang-name="${langName}">
+                        <!-- 編輯按鈕 -->
+                        <button class="edit-button px-4 py-2 bg-gray-400 text-gray-800 rounded-md shadow-sm hover:bg-gray-500 transition-colors duration-200 flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                            <span>編輯</span>
+                        </button>
+                        <!-- 確認按鈕 (初始隱藏) -->
+                        <button class="confirm-button hidden px-4 py-2 bg-green-500 text-white rounded-md shadow-sm hover:bg-green-600 transition-colors duration-200 flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+                            <span>確認</span>
+                        </button>
+                        <!-- 取消按鈕 (初始隱藏) -->
+                        <button class="cancel-button hidden px-4 py-2 bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600 transition-colors duration-200 flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                            <span>取消</span>
+                        </button>
+                        <button class="play-button px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-200 flex items-center space-x-2" data-lang-code="${langCode}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
                             <span>播放語音</span>
                         </button>
@@ -477,120 +557,188 @@
                     </div>
                 </div>
                 
-                <h4 class="text-2xl font-bold text-blue-800 dark:text-blue-200">${title}</h4>
-                <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0 text-gray-500 dark:text-gray-400 text-sm">
-                    <p>${labels.dateLabel}: ${date}</p>
-                    <p>${labels.sourceLabel}: ${source}</p>
-                    <p>${labels.editorLabel}: ${editor}</p>
+                <!-- 可編輯區塊 -->
+                <div class="space-y-2">
+                    <div class="editable-field">
+                        <h4 class="text-2xl font-bold text-blue-800 dark:text-blue-200 editable" data-field="title" contenteditable="false">${title}</h4>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0 text-gray-500 dark:text-gray-400 text-sm">
+                        <div class="editable-field">
+                            <p class="editable" data-field="date" contenteditable="false">${labels.dateLabel}: <span class="editable-content">${date}</span></p>
+                        </div>
+                        <div class="editable-field">
+                            <p class="editable" data-field="source" contenteditable="false">${labels.sourceLabel}: <span class="editable-content">${source}</span></p>
+                        </div>
+                        <div class="editable-field">
+                            <p class="editable" data-field="editor" contenteditable="false">${labels.editorLabel}: <span class="editable-content">${editor}</span></p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-red-400 dark:text-red-300 italic">${disclaimer}</p>
+                    <div class="editable-field">
+                        <div class="translated-text text-gray-700 dark:text-gray-200 text-lg leading-relaxed editable" data-field="body" contenteditable="false">${formattedBody}</div>
+                    </div>
                 </div>
-                <p class="text-xs text-red-400 dark:text-red-300 italic">${disclaimer}</p>
-                <p class="translated-text text-gray-700 dark:text-gray-200 text-lg leading-relaxed">${formattedBody}</p>
             `;
             resultsContainer.appendChild(card);
 
-            // 綁定語音播放事件
+            // 修正：為每張卡片創建一個獨立的 Audio 物件
+            const cardAudioPlayer = new Audio();
+            const editButton = card.querySelector('.edit-button');
+            const confirmButton = card.querySelector('.confirm-button');
+            const cancelButton = card.querySelector('.cancel-button');
+            const editableFields = card.querySelectorAll('.editable');
             const playButton = card.querySelector('.play-button');
-            playButton.addEventListener('click', () => {
-                playAudioWithGemini(combinedText, langCode, voiceName, playButton);
+            const downloadButton = card.querySelector('.download-button');
+            
+            // 定義按鈕的圖示和文字
+            const playSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><span>播放語音</span>`;
+            const pauseSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause"><rect width="6" height="16" x="4" y="4"/><rect width="6" height="16" x="14" y="4"/></svg><span>暫停</span>`;
+            const loadingSvg = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>載入中...</span>`;
+            const replaySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw"><path d="M21 12a9 9 0 1 1-9-9c2.6 0 4.9 1 6.7 2.8"/><path d="M17 12V3h4"/></svg><span>重新播放語音</span>`;
+
+
+            // 儲存原始內容以備取消時使用
+            const originalContent = {};
+            editableFields.forEach(field => {
+                const fieldName = field.dataset.field;
+                originalContent[fieldName] = field.innerHTML;
+            });
+
+            // 編輯按鈕事件
+            editButton.addEventListener('click', () => {
+                // 如果正在播放，停止播放
+                if (!cardAudioPlayer.paused) {
+                    cardAudioPlayer.pause();
+                }
+                editableFields.forEach(field => {
+                    field.contentEditable = true;
+                    field.classList.add('p-2', 'rounded-md', 'border', 'border-gray-400', 'bg-white', 'dark:bg-gray-600', 'editable-active');
+                    originalContent[field.dataset.field] = field.innerHTML;
+                });
+                editButton.classList.add('hidden');
+                confirmButton.classList.remove('hidden');
+                cancelButton.classList.remove('hidden');
+            });
+
+            // 確認按鈕事件
+            confirmButton.addEventListener('click', () => {
+                const langCode = playButton.dataset.langCode;
+                // 清除原有的音訊資料，迫使下次點擊時重新生成
+                if (wavBlobs[langCode]) {
+                    URL.revokeObjectURL(cardAudioPlayer.src);
+                }
+                wavBlobs[langCode] = null;
+                
+                // 恢復按鈕狀態並更改播放按鈕為「重新播放」
+                editableFields.forEach(field => {
+                    field.contentEditable = false;
+                    field.classList.remove('p-2', 'rounded-md', 'border', 'border-gray-400', 'bg-white', 'dark:bg-gray-600', 'editable-active');
+                });
+                editButton.classList.remove('hidden');
+                confirmButton.classList.add('hidden');
+                cancelButton.classList.add('hidden');
+
+                // 更改播放按鈕的文字和圖示
+                playButton.innerHTML = replaySvg;
+                downloadButton.disabled = true;
+            });
+
+            // 取消按鈕事件
+            cancelButton.addEventListener('click', () => {
+                editableFields.forEach(field => {
+                    field.innerHTML = originalContent[field.dataset.field];
+                    field.contentEditable = false;
+                    field.classList.remove('p-2', 'rounded-md', 'border', 'border-gray-400', 'bg-white', 'dark:bg-gray-600', 'editable-active');
+                });
+                editButton.classList.remove('hidden');
+                confirmButton.classList.add('hidden');
+                cancelButton.classList.add('hidden');
+            });
+
+            // 綁定語音播放/暫停事件
+            playButton.addEventListener('click', async () => {
+                // 如果已經有音訊且正在播放，則暫停
+                if (!cardAudioPlayer.paused) {
+                    cardAudioPlayer.pause();
+                    playButton.innerHTML = playSvg;
+                    return;
+                } 
+
+                // 如果音訊已生成並暫停，則恢復播放
+                const langCode = playButton.dataset.langCode;
+                if (wavBlobs[langCode]) {
+                    try {
+                        await cardAudioPlayer.play();
+                        playButton.innerHTML = pauseSvg;
+                    } catch (error) {
+                         console.error('播放失敗:', error);
+                         showErrorMessage('瀏覽器阻止了自動播放。請再點擊一次以播放。');
+                    }
+                    return;
+                }
+                
+                // 否則，生成並播放新的音訊
+                const currentTitle = card.querySelector('[data-field="title"]').textContent.trim();
+                const currentBody = card.querySelector('[data-field="body"]').textContent.trim().replace(/<br>/g, ' ');
+                const textForSpeech = `${currentTitle}。 ${currentBody}`; // 加入句號讓語音更自然
+                
+                playButton.disabled = true;
+                playButton.innerHTML = loadingSvg;
+                
+                try {
+                    await playAudioWithGemini(textForSpeech, langCode, voiceName, cardAudioPlayer);
+                    // 語音生成成功後，啟用下載按鈕
+                    downloadButton.disabled = false;
+                    // 並立即嘗試播放，如果失敗則提示使用者
+                    try {
+                        await cardAudioPlayer.play();
+                        playButton.innerHTML = pauseSvg;
+                    } catch (error) {
+                        console.error('播放失敗:', error);
+                        showErrorMessage('瀏覽器阻止了自動播放。請再點擊一次以播放。');
+                        playButton.innerHTML = playSvg;
+                    }
+                } catch (error) {
+                    console.error('語音生成失敗:', error);
+                    showErrorMessage(error.message);
+                    playButton.innerHTML = playSvg;
+                } finally {
+                    playButton.disabled = false;
+                }
+            });
+
+            // 綁定下載按鈕事件
+            downloadButton.addEventListener('click', () => {
+                const langCode = playButton.dataset.langCode;
+                const blob = wavBlobs[langCode];
+                if (blob) {
+                    const title = titleInput.value.trim() || 'RTI-News';
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `${title}_${langCode}.wav`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(a.href);
+                } else {
+                    showErrorMessage('音訊檔案尚未生成，請先點擊播放按鈕。');
+                }
             });
         }
         
         /**
-         * @description 將 Base64 資料轉換為 ArrayBuffer。
-         * @param {string} base64 Base64 編碼的資料。
-         * @returns {ArrayBuffer}
-         */
-        function base64ToArrayBuffer(base64) {
-            const binaryString = atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return bytes.buffer;
-        }
-
-        /**
-         * @description 將 PCM 格式的音訊資料轉換為 WAV 格式的 Blob。
-         * @param {Int16Array} pcmData PCM 格式的音訊資料。
-         * @param {number} sampleRate 取樣率。
-         * @returns {Blob} WAV 格式的音訊 Blob。
-         */
-        function pcmToWav(pcmData, sampleRate) {
-            const buffer = new ArrayBuffer(44 + pcmData.length * 2);
-            const view = new DataView(buffer);
-
-            // WAV header
-            let offset = 0;
-            // RIFF chunk descriptor
-            writeString('RIFF', offset, view); offset += 4;
-            view.setUint32(offset, 36 + pcmData.length * 2, true); offset += 4;
-            writeString('WAVE', offset, view); offset += 4;
-            // fmt chunk
-            writeString('fmt ', offset, view); offset += 4;
-            view.setUint32(offset, 16, true); offset += 4; // Chunk size
-            view.setUint16(offset, 1, true); offset += 2;  // Audio format (1 = PCM)
-            view.setUint16(offset, 1, true); offset += 2;  // Num channels
-            view.setUint32(offset, sampleRate, true); offset += 4; // Sample rate
-            view.setUint32(offset, sampleRate * 2, true); offset += 4; // Byte rate
-            view.setUint16(offset, 2, true); offset += 2;  // Block align
-            view.setUint16(offset, 16, true); offset += 2; // Bits per sample
-            // data chunk
-            writeString('data', offset, view); offset += 4;
-            view.setUint32(offset, pcmData.length * 2, true); offset += 4;
-            
-            // PCM data
-            for (let i = 0; i < pcmData.length; i++, offset += 2) {
-                view.setInt16(offset, pcmData[i], true);
-            }
-
-            return new Blob([view], { type: 'audio/wav' });
-
-            function writeString(s, offset, view) {
-                for (let i = 0; i < s.length; i++) {
-                    view.setUint8(offset + i, s.charCodeAt(i));
-                }
-            }
-        }
-        
-        /**
          * @description 使用 Gemini API 播放語音。
-         * 修正了行動裝置瀏覽器自動播放的限制。
          * @param {string} text 要播放的文本。
          * @param {string} langCode 語言代碼。
          * @param {string} voiceName 語音名稱。
-         * @param {HTMLButtonElement} button 觸發播放的按鈕元素。
+         * @param {HTMLAudioElement} audioPlayer 音訊播放器物件。
          */
-        async function playAudioWithGemini(text, langCode, voiceName, button) {
-            const originalButtonText = button.innerHTML;
-            button.disabled = true;
-            button.innerHTML = `
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>載入中...</span>
-            `;
-            const card = button.closest('.bg-gray-50');
-            const downloadButton = card.querySelector('.download-button');
-
-            // 停止舊的音訊播放
-            if (audioPlayer) {
-                audioPlayer.pause();
-                audioPlayer.currentTime = 0;
-            }
-
-            // 這一步是關鍵：在使用者點擊事件中立即創建並嘗試播放音訊。
-            // 由於音訊還未下載，這將會失敗，但瀏覽器會將此動作標記為「使用者觸發」。
-            audioPlayer = new Audio();
-            audioPlayer.volume = 1.0;
-            const playPromise = audioPlayer.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    // 這裡的錯誤是預期的，因為音訊還沒有載入，可以忽略。
-                    console.log("Initial play failed, as expected:", error.message);
-                });
-            }
+        async function playAudioWithGemini(text, langCode, voiceName, audioPlayer) {
+            console.log('--- 準備語音合成 ---');
+            console.log('語言代碼:', langCode);
+            console.log('語音名稱:', voiceName);
+            console.log('用於語音合成的文本:', text);
+            console.log('--------------------');
 
             const payload = {
                 contents: [{ parts: [{ text: text }] }],
@@ -599,13 +747,14 @@
                     speechConfig: {
                         voiceConfig: {
                             prebuiltVoiceConfig: { voiceName: voiceName }
-                        }
+                        },
+                        languageCode: langCode
                     }
                 },
                 model: "gemini-2.5-flash-preview-tts"
             };
 
-            const apiKey = "AIzaSyC1Fcc6qXOHY7tEh11fq7AD0ddwjtyeaNI";
+            const apiKey = "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
 
             try {
@@ -664,54 +813,26 @@
                 const mimeType = part?.inlineData?.mimeType;
 
                 if (audioData && mimeType && mimeType.startsWith("audio/")) {
-                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
-                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000;
-                    
-                    const pcmData = base64ToArrayBuffer(audioData);
-                    const pcm16 = new Int16Array(pcmData);
-                    const wavBlob = pcmToWav(pcm16, sampleRate);
-                    const audioUrl = URL.createObjectURL(wavBlob);
-                    
-                    // 將 WAV Blob 暫存在一個物件中，以便下載按鈕可以存取
-                    wavBlobs[langCode] = wavBlob;
-
-                    // 將下載按鈕啟用
-                    downloadButton.disabled = false;
-                    // 新增下載按鈕的事件監聽器
-                    downloadButton.addEventListener('click', () => {
-                        const blob = wavBlobs[langCode];
-                        if (blob) {
-                            const title = titleInput.value.trim() || 'RTI-News';
-                            const a = document.createElement('a');
-                            a.href = URL.createObjectURL(blob);
-                            a.download = `${title}_${langCode}.wav`;
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                            URL.revokeObjectURL(a.href);
-                        } else {
-                            showErrorMessage('音訊檔案尚未生成，請先點擊播放按鈕。');
+                    try {
+                        const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                        const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+                        const pcmData = base64ToArrayBuffer(audioData);
+                        const pcm16 = new Int16Array(pcmData);
+                        const wavBlob = pcmToWav(pcm16, sampleRate);
+                        
+                        // 將 WAV Blob 暫存在一個物件中，以便下載按鈕可以存取
+                        wavBlobs[langCode] = wavBlob;
+                        
+                        // 將下載的音訊資料設定給已存在的 Audio 物件
+                        if (audioPlayer.src) {
+                             URL.revokeObjectURL(audioPlayer.src);
                         }
-                    });
-
-                    // 將下載的音訊資料設定給已存在的 Audio 物件
-                    audioPlayer.src = audioUrl;
-                    audioPlayer.load();
-
-                    // 音訊載入完成後再播放，因為這一步是在使用者觸發事件的「同一個」 Audio 物件上進行，
-                    // 所以可以繞過瀏覽器的限制。
-                    audioPlayer.oncanplaythrough = () => {
-                        audioPlayer.play();
-                        button.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-                            <span>播放中...</span>
-                        `;
-                    };
-
-                    audioPlayer.onended = () => {
-                        button.disabled = false;
-                        button.innerHTML = originalButtonText;
-                    };
+                        audioPlayer.src = URL.createObjectURL(wavBlob);
+                        audioPlayer.load();
+                    } catch (audioError) {
+                        console.error('音訊處理失敗:', audioError);
+                        throw new Error('無法處理音訊資料。');
+                    }
                 } else {
                     console.error('API Response:', result);
                     throw new Error("API返回的音訊資料格式不正確或為空。");
@@ -719,12 +840,7 @@
             } catch (error) {
                 console.error('語音生成失敗:', error);
                 showErrorMessage('語音生成失敗，請稍後再試。');
-            } finally {
-                // 如果發生錯誤，恢復按鈕狀態
-                if (button.disabled) {
-                    button.disabled = false;
-                    button.innerHTML = originalButtonText;
-                }
+                throw error; // 重新拋出錯誤，讓呼叫者處理
             }
         }
 
