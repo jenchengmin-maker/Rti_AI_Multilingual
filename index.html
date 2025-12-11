@@ -351,7 +351,7 @@
             const prompt = `Translate the following Traditional Chinese news report into ${targetLangName}. The style and vocabulary should be formal and suitable for a news report in that language. Preserve all line breaks in the body text. Structure the output with the following labels: title:, date:, source:, editor:, and body:.\n\n${text}`;
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey ="AIzaSyC1Fcc6qXOHY7tEh11fq7AD0ddwjtyeaNI";
+            const apiKey ="AIzaSyAsHI3OAWXwXNv89LnA7pZjuY6lMIsC8KE";
             const apiUrl =`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
             
             try {
@@ -761,7 +761,7 @@
                 model: "gemini-2.5-flash-preview-tts"
             };
 
-            const apiKey ="AIzaSyC1Fcc6qXOHY7tEh11fq7AD0ddwjtyeaNI";
+            const apiKey ="AIzaSyAsHI3OAWXwXNv89LnA7pZjuY6lMIsC8KE";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
             try {
